@@ -13,8 +13,10 @@
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         .product-card { border: 1px solid #bbb; border-radius: 8px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column;}
         .product-card h2 { margin-top: 0; font-size: 1.2rem; }
-        .cd-bg { background-color: #e3f2fd; } /* Světle modrá */
-        .dvd-bg { background-color: #fff3e0; } /* Světle oranžová */
+        
+        .cd-bg { background-color: #e3f2fd; } 
+        .dvd-bg { background-color: #fff3e0; } 
+        .gray-bg { background-color: #e0e0e0; } 
         
         .bold-label { font-weight: bold; }
         .text-green { color: #2e7d32; }
@@ -25,7 +27,9 @@
         .btn-green { background-color: #4caf50; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: auto; font-weight: bold; }
         .btn-green:hover { background-color: #388e3c; }
         .btn-green:disabled { background-color: #9e9e9e; cursor: not-allowed; }
-        .btn-gray { background-color: #9e9e9e; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-blue { background-color: #1976d2; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; margin-top: auto; font-weight: bold; }
+        .btn-blue:hover { background-color: #1565c0; }
+        .btn-gray { background-color: #9e9e9e; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: auto; }
         
         /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
@@ -56,19 +60,16 @@
 
     <h1>Admin rozhraní: E-shop CD a DVD</h1>
     <hr>
-    <div id="product-container" class="grid-container">
-        </div>
+    <div id="product-container" class="grid-container"></div>
 
     <div id="stock-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <h3 id="modal-title">Úprava skladové dostupnosti produktu XYZ</h3>
-            
+            <h3 id="modal-title">Úprava skladové dostupnosti</h3>
             <div class="radio-group">
                 <label><input type="radio" name="stockType" value="skladem"> Skladem</label>
                 <label><input type="radio" name="stockType" value="naskladnuje"> Naskladňuje se</label>
                 <label><input type="radio" name="stockType" value="vyprodano"> Vyprodáno, prodej ukončen</label>
             </div>
-
             <div id="stock-count-wrapper" class="hidden">
                 <span class="bold-label">Počet kusů skladem:</span>
                 <div class="qty-controls">
@@ -77,12 +78,10 @@
                     <button type="button" id="btn-plus">+</button>
                 </div>
             </div>
-
             <span id="modal-error" class="error-text hidden"></span>
-
             <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-                <button id="modal-cancel" class="btn-gray">Zrušit</button>
-                <button id="modal-confirm" class="btn-green">Potvrdit</button>
+                <button id="modal-cancel" class="btn-gray" style="margin-top: 0;">Zrušit</button>
+                <button id="modal-confirm" class="btn-green" style="margin-top: 0;">Potvrdit</button>
             </div>
         </div>
     </div>
@@ -104,53 +103,43 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Definice výchozích dat
         const defaultProducts = {
             "p1": { name: "CD-R Extra Protection 1 ks", type: "cd", price: 15, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-48-52x-DataLife-slim-box.html"] },
             "p2": { name: "CD-R Extra Protection 10 ks spindle", type: "cd", price: 90, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DL-10-pack-cake-box.html"] },
             "p3": { name: "CD-R Extra Protection 10 ks balení", type: "cd", price: 120, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-Verbatim-CD-R80-700mb-48x-DataLife-10-pack-slim-box.html"] },
             "p4": { name: "DVD-R 1 ks", type: "dvd", price: 20, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/DVD-medium-VERBATIM-DVD-R-4-7GB-16x-silver-jewel-box-1.html", "https://www.prodejdvd.cz/p/190543/verbatim-dvd-r-matt-silver-43547-47gb-16x-slim-box-1-ks-bez-moznosti-potisku-12cm-pro-archivaci-dat"] },
             "p5": { name: "DVD-R 10 ks spindle", type: "dvd", price: 150, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/DVD-medium-Verbatim-DVD-R-4-7GB-16x-10-pack-cake-box.html"] },
-            "p6": { name: "CD-R AZO 1 ks", type: "cd", price: 25, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DLP-jewel-box.html"] }
+            "p6": { name: "CD-R AZO 1 ks", type: "cd", price: 25, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DLP-jewel-box.html"] },
+            "p7": { name: "Poškozené prodejka", type: "other", price: 133, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] }
         };
 
         let currentProducts = {};
         let activeEditingProductId = null;
         let ordersSkipped = false;
 
-        // Inicializace DB
         get(ref(db, 'products')).then((snapshot) => {
             if (!snapshot.exists()) {
                 set(ref(db, 'products'), defaultProducts);
+            } else {
+                if (!snapshot.val().p7) set(ref(db, 'products/p7'), defaultProducts.p7);
             }
         });
 
-        // Naslouchání objednávkám
         onValue(ref(db, 'orders'), (snapshot) => {
             const orders = snapshot.val();
             const ordersLayer = document.getElementById('orders-layer');
             const ordersList = document.getElementById('orders-list');
-            
             if (orders && Object.keys(orders).length > 0) {
-                if (!ordersSkipped) {
-                    ordersLayer.classList.remove('hidden');
-                }
+                if (!ordersSkipped) ordersLayer.classList.remove('hidden');
                 ordersList.innerHTML = '';
                 for (const [key, order] of Object.entries(orders)) {
                     ordersList.innerHTML += `
                         <div class="order-item">
-                            <div>
-                                <strong>${order.productName}</strong><br>
-                                Počet kusů: ${order.qty} ks<br>
-                                Celková cena: ${order.totalPrice} Kč
-                            </div>
-                            <button class="btn-green" onclick="window.resolveOrder('${key}')">Vyřízeno</button>
-                        </div>
-                    `;
+                            <div><strong>${order.productName}</strong><br>Počet kusů: ${order.qty} ks<br>Celková cena: ${order.totalPrice} Kč</div>
+                            <button class="btn-green" style="margin-top:0;" onclick="window.resolveOrder('${key}')">Vyřízeno</button>
+                        </div>`;
                 }
-            } else {
-                ordersLayer.classList.add('hidden');
-            }
+            } else { ordersLayer.classList.add('hidden'); }
         });
 
         document.getElementById('skip-orders-btn').addEventListener('click', () => {
@@ -159,12 +148,9 @@
         });
 
         window.resolveOrder = (orderId) => {
-            if (confirm("Opravdu byla vyřízena?")) {
-                remove(ref(db, 'orders/' + orderId));
-            }
+            if (confirm("Opravdu byla vyřízena?")) remove(ref(db, 'orders/' + orderId));
         };
 
-        // Naslouchání produktům
         onValue(ref(db, 'products'), (snapshot) => {
             currentProducts = snapshot.val();
             renderProducts();
@@ -173,18 +159,17 @@
         function renderProducts() {
             const container = document.getElementById('product-container');
             container.innerHTML = '';
-            
-            // Zachování pořadí p1 až p6
-            const order = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6'];
+            const order = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7'];
             
             order.forEach(id => {
                 if(!currentProducts || !currentProducts[id]) return;
                 const p = currentProducts[id];
-                
-                let bgClass = p.type === 'cd' ? 'cd-bg' : 'dvd-bg';
+                let bgClass = id === 'p7' ? 'gray-bg' : (p.type === 'cd' ? 'cd-bg' : 'dvd-bg');
                 
                 let stockHtml = '';
-                if (p.stockType === 'skladem') {
+                if (id === 'p7') {
+                    stockHtml = `<span class="text-red bold-label">Samostatně neprodejné</span>`;
+                } else if (p.stockType === 'skladem') {
                     stockHtml = `<span class="text-green bold-label">${p.stockCount === 1 ? 'poslední kus' : p.stockCount + ' ks'}</span>`;
                 } else if (p.stockType === 'naskladnuje') {
                     stockHtml = `<span class="text-orange bold-label">Naskladňuje se</span>`;
@@ -192,7 +177,13 @@
                     stockHtml = `<span class="text-red bold-label">Vyprodáno, prodej ukončen</span>`;
                 }
 
-                let linksHtml = p.links.map(link => `<a href="${link}" target="_blank">ZDE</a>`).join(" a ");
+                let linkText = id === 'p7' ? "PŘEJDĚTE SEM" : "ZDE";
+                let linksHtml = p.links.map(link => `<a href="${link}" target="_blank">${linkText}</a>`).join(" a ");
+                
+                // ADMIN LINK: GOOGLE
+                let buttonHtml = id === 'p7' 
+                    ? `<button class="btn-blue" onclick="window.open('https://nts-windows-tools.github.io/prodejkaposkozeneadmin/', '_blank')">Spravovat na webu</button>`
+                    : `<button class="btn-green" onclick="window.openStockModal('${id}')">Změna dostupnosti skladem</button>`;
 
                 container.innerHTML += `
                     <div class="product-card ${bgClass}">
@@ -200,13 +191,11 @@
                         <p><span class="bold-label">Cena:</span> ${p.price} Kč</p>
                         <p><span class="bold-label">Skladem:</span> ${stockHtml}</p>
                         <p><span class="bold-label">Více informací:</span> ${linksHtml}</p>
-                        <button class="btn-green" onclick="window.openStockModal('${id}')">Změna dostupnosti skladem</button>
-                    </div>
-                `;
+                        ${buttonHtml}
+                    </div>`;
             });
         }
 
-        // Logika modálního okna
         const modal = document.getElementById('stock-modal');
         const stockWrapper = document.getElementById('stock-count-wrapper');
         const stockInput = document.getElementById('stock-input');
@@ -218,17 +207,10 @@
             activeEditingProductId = id;
             const p = currentProducts[id];
             document.getElementById('modal-title').innerText = `Úprava skladové dostupnosti produktu ${p.name}`;
-            
-            // Reset
             errorText.classList.add('hidden');
             btnConfirm.disabled = false;
-            
-            // Set current state
-            for(let r of radios) {
-                if(r.value === p.stockType) r.checked = true;
-            }
+            for(let r of radios) if(r.value === p.stockType) r.checked = true;
             stockInput.value = p.stockType === 'skladem' ? p.stockCount : "";
-            
             updateModalUI();
             modal.classList.remove('hidden');
         };
@@ -247,60 +229,24 @@
 
         function validateInput() {
             let val = stockInput.value.trim();
-            if (val === "") {
+            if (val === "" || isNaN(parseInt(val)) || parseInt(val) === 0) {
                 btnConfirm.disabled = true;
-                errorText.innerText = "Pro pokračování je potřeba zadat počet ks!";
+                errorText.innerText = val === "" ? "Pro pokračování je potřeba zadat počet ks!" : "Nelze zadat 0 ks.";
                 errorText.classList.remove('hidden');
             } else {
-                let num = parseInt(val);
-                if (isNaN(num) || num === 0) {
-                    btnConfirm.disabled = true;
-                    errorText.innerText = "Nelze zadat 0 ks. Pokud není žádný kus skladem, tak se nyní buď naskladňují nebo už jsou trvale vyprodány - zvolit možnost výše!";
-                    errorText.classList.remove('hidden');
-                } else {
-                    btnConfirm.disabled = false;
-                    errorText.classList.add('hidden');
-                }
+                btnConfirm.disabled = false;
+                errorText.classList.add('hidden');
             }
         }
 
         for(let r of radios) r.addEventListener('change', updateModalUI);
-        
-        stockInput.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, '');
-            validateInput();
-        });
-
-        document.getElementById('btn-plus').addEventListener('click', () => {
-            let val = parseInt(stockInput.value || "0") + 1;
-            stockInput.value = val;
-            validateInput();
-        });
-
-        document.getElementById('btn-minus').addEventListener('click', () => {
-            let val = parseInt(stockInput.value || "0") - 1;
-            if (val < 0) val = 0;
-            stockInput.value = val;
-            validateInput();
-        });
-
-        document.getElementById('modal-cancel').addEventListener('click', () => {
-            modal.classList.add('hidden');
-        });
-
+        stockInput.addEventListener('input', (e) => { e.target.value = e.target.value.replace(/[^0-9]/g, ''); validateInput(); });
+        document.getElementById('btn-plus').addEventListener('click', () => { stockInput.value = (parseInt(stockInput.value || "0") + 1); validateInput(); });
+        document.getElementById('btn-minus').addEventListener('click', () => { let val = Math.max(0, parseInt(stockInput.value || "0") - 1); stockInput.value = val; validateInput(); });
+        document.getElementById('modal-cancel').addEventListener('click', () => modal.classList.add('hidden'));
         document.getElementById('modal-confirm').addEventListener('click', () => {
             let selected = Array.from(radios).find(r => r.checked).value;
-            let updates = { stockType: selected };
-            
-            if (selected === 'skladem') {
-                updates.stockCount = parseInt(stockInput.value);
-            } else {
-                updates.stockCount = 0;
-            }
-
-            update(ref(db, 'products/' + activeEditingProductId), updates).then(() => {
-                modal.classList.add('hidden');
-            });
+            update(ref(db, 'products/' + activeEditingProductId), { stockType: selected, stockCount: selected === 'skladem' ? parseInt(stockInput.value) : 0 }).then(() => modal.classList.add('hidden'));
         });
     </script>
 </body>
