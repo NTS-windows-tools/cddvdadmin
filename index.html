@@ -107,7 +107,9 @@
             "p1": { name: "CD-R Extra Protection 1 ks", type: "cd", price: 15, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-48-52x-DataLife-slim-box.html"] },
             "p2": { name: "CD-R Extra Protection 10 ks spindle", type: "cd", price: 90, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DL-10-pack-cake-box.html"] },
             "p3": { name: "CD-R Extra Protection 10 ks balení", type: "cd", price: 120, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-Verbatim-CD-R80-700mb-48x-DataLife-10-pack-slim-box.html"] },
+            "p31": { name: "CD-R Extra Protection wrap 10 ks", type: "cd", price: 99, stockType: "naskladnuje", stockCount: 0, links: ["https://www.alza.cz/verbatim-cd-r-80-52x-wrap-extra-protection-10pck-bal-d5285296.htm", "https://www.prodejdvd.cz/p/167513/cd-r-verbatim-dl-700mb-52x-extra-protection-wrap-10bulk"] },
             "p4": { name: "DVD-R 1 ks", type: "dvd", price: 20, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/DVD-medium-VERBATIM-DVD-R-4-7GB-16x-silver-jewel-box-1.html", "https://www.prodejdvd.cz/p/190543/verbatim-dvd-r-matt-silver-43547-47gb-16x-slim-box-1-ks-bez-moznosti-potisku-12cm-pro-archivaci-dat"] },
+            "p41": { name: "DVD-R wrap 10 ks", type: "dvd", price: 100, stockType: "naskladnuje", stockCount: 0, links: ["https://www.alza.cz/verbatim-dvd-r-azo-4-7gb-16x-wrap-10-ks-d5690275.htm", "https://www.prodejdvd.cz/p/180204/verbatim-dvd-r-43729-datalife-10-pack-47gb-16x-12cm-matt-silver-wrap-azo-pro-archivaci-dat"] },
             "p5": { name: "DVD-R 10 ks spindle", type: "dvd", price: 150, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/DVD-medium-Verbatim-DVD-R-4-7GB-16x-10-pack-cake-box.html"] },
             "p6": { name: "CD-R AZO 1 ks", type: "cd", price: 25, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DLP-jewel-box.html"] },
             "p7": { name: "Poškozené prodejka", type: "other", price: 133, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] }
@@ -159,7 +161,7 @@
         function renderProducts() {
             const container = document.getElementById('product-container');
             container.innerHTML = '';
-            const order = ['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7'];
+            const order = ['p1', 'p2', 'p3', 'p31', 'p4', 'p41', 'p5', 'p6', 'p7'];
             
             order.forEach(id => {
                 if(!currentProducts || !currentProducts[id]) return;
