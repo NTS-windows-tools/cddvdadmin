@@ -113,6 +113,7 @@
             "p5": { name: "DVD-R 10 ks spindle", type: "dvd", price: 150, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/DVD-medium-Verbatim-DVD-R-4-7GB-16x-10-pack-cake-box.html"] },
             "p6": { name: "CD-R AZO 1 ks (DOPRODEJ)", type: "cd", price: 25, stockType: "naskladnuje", stockCount: 0, links: ["https://www.datart.cz/CD-R-medium-VERBATIM-CD-R80-700mb-52x-DLP-jewel-box.html", "https://www.datart.cz/vyhledavani?q=VER1KS43327"] },
             "p61": { name: "CD-R 700 MB v polypropylenové obálce 1 ks", type: "cd", price: 35, stockType: "naskladnuje", stockCount: 0, links: ["https://www.prodejdvd.cz/p/153986/cd-r-blank-700mb-v-papirove-obalce"] },
+            "p62": { name: "Průhledný obal na CD, DVD", type: "other", price: 35, stockType: "naskladnuje", stockCount: 0, links: ["https://www.prodejdvd.cz/p/153986/cd-r-blank-700mb-v-papirove-obalce"] },
             "p7": { name: "Poškozené prodejka", type: "other", price: 133, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] }
         };
 
@@ -162,7 +163,7 @@
         function renderProducts() {
             const container = document.getElementById('product-container');
             container.innerHTML = '';
-            const order = ['p1', 'p2', 'p3', 'p31', 'p4', 'p41', 'p5', 'p6', 'p61', 'p7'];
+            const order = ['p1', 'p2', 'p3', 'p31', 'p4', 'p41', 'p5', 'p6', 'p61', 'p62', 'p7'];
             
             order.forEach(id => {
                 if(!currentProducts || !currentProducts[id]) return;
