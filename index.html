@@ -117,6 +117,7 @@
             "p62": { name: "Průhledný obal na CD, DVD", type: "other", price: 35, stockType: "naskladnuje", stockCount: 0, links: ["https://www.prodejdvd.cz/p/153986/cd-r-blank-700mb-v-papirove-obalce"] },
             "p71": { name: "Obal (logo papír) CD", type: "cd", price: 0, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] },
             "p72": { name: "Obal (logo papír) DVD", type: "dvd", price: 0, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] },
+            "p73": { name: "Vypálená CD / DVD", type: "other", price: 0, stockType: "naskladnuje", stockCount: 0, links: ["https://google.com"] },
             "p8": { name: "Poškozené prodejka", type: "other", price: 133, stockType: "naskladnuje", stockCount: 0, links: ["https://google.cz"] }
         };
 
@@ -166,7 +167,7 @@
         function renderProducts() {
             const container = document.getElementById('product-container');
             container.innerHTML = '';
-            const order = ['p1', 'p2', 'p3', 'p31', 'p4', 'p41', 'p5', 'p6', 'p61', 'p60', 'p62', 'p71', 'p72', 'p7'];
+            const order = ['p1', 'p2', 'p3', 'p31', 'p4', 'p41', 'p5', 'p6', 'p61', 'p60', 'p62', 'p71', 'p72', 'p73', 'p7'];
             
             order.forEach(id => {
                 if(!currentProducts || !currentProducts[id]) return;
